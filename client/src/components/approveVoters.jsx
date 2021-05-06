@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import Layout from "./layout";
 import Jumbotron from "react-bootstrap/Jumbotron";
 
 const ApproveVoters = ({ _approveVoter }) => {
@@ -13,7 +13,7 @@ const ApproveVoters = ({ _approveVoter }) => {
 	};
 
 	return (
-		<Container>
+		<Layout>
 			<Jumbotron>
 				<h2>Approve Voters</h2>
 			</Jumbotron>
@@ -34,7 +34,7 @@ const ApproveVoters = ({ _approveVoter }) => {
 					Approve
 				</Button>
 			</Form>
-		</Container>
+		</Layout>
 	);
 };
 

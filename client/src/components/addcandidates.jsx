@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import Layout from "./layout";
 import Jumbotron from "react-bootstrap/Jumbotron";
 
 const AddCandidates = ({ _addCandidate }) => {
@@ -15,12 +15,12 @@ const AddCandidates = ({ _addCandidate }) => {
 	};
 
 	return (
-		<Container>
+		<Layout>
 			<Jumbotron>
 				<h2>Add Candidate</h2>
 			</Jumbotron>
 			<Form
-				style={{ width: "35%", marginLeft: "3%" }}
+				style={{ width: "50%", marginLeft: "3%" }}
 				onSubmit={submitHandler}
 			>
 				<Form.Group controlId="formBasic">
@@ -55,7 +55,7 @@ const AddCandidates = ({ _addCandidate }) => {
 					Add
 				</Button>
 			</Form>
-		</Container>
+		</Layout>
 	);
 };
 

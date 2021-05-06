@@ -46,6 +46,16 @@ contract Election {
 		_;
 	}
 
+	modifier onlyBefore(uint _time) {
+		require(now  < _time);
+		_;
+	}
+
+	modifier onlyAfter(uint _time) {
+		require(now > _time);
+		_;
+	}
+
 	function changeOwner(address _newOwner) public ownerOnly {
 		owner = _newOwner;
 	}
@@ -54,7 +64,8 @@ contract Election {
 		string memory _candidateName, 
 		uint _partyId, 
 		string memory _description
-		) public ownerOnly {
+		) public ownerOnly 
+		onlyBefore(startTime) {
 
 		require(bytes(_candidateName).length > 5);
 		require(_partyId > 0);
@@ -63,7 +74,11 @@ contract Election {
 		emit NewCandidateAdded(candidateCount, _candidateName, _partyId, 0, _description);
 	}
 
-	function approveVoters(address _voter) public ownerOnly {
+	function approveVoters(address _voter) 
+		public 
+		ownerOnly 
+		onlyBefore(startTime) {
+			
 		require(!voters[_voter].authorized);
 		require (voters[_voter].authorized == false);
 		voters[_voter].authorized = true;
@@ -84,8 +99,7 @@ contract Election {
 		_voter.voted = true;
 	}
 
-	function checkResults() public view returns (uint winningCandidateId) {
-		require(endTime < now, 'Election time is not over yet.');
+	function checkResults() public view onlyAfter(endTime) returns (uint winningCandidateId) {
 		
 		uint highestVoteCount = 0;
 		for(uint i = 1; i <= candidateCount; i++) {
@@ -94,6 +108,5 @@ contract Election {
 				winningCandidateId = i;
 			}
 		}
-		return winningCandidateId;
 	}
 }

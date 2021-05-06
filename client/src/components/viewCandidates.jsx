@@ -1,12 +1,12 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
-import Container from "react-bootstrap/Container";
+import Layout from "./layout";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Card from "react-bootstrap/Card";
 
 const ViewCandidates = ({ candidates }) => {
 	return (
-		<Container>
+		<Layout>
 			<Jumbotron>
 				<h2>Candidates</h2>
 			</Jumbotron>
@@ -30,7 +30,7 @@ const ViewCandidates = ({ candidates }) => {
 						</ListGroup>
 					</Card>
 				))}
-		</Container>
+		</Layout>
 	);
 };
 

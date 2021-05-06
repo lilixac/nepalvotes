@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import ElectionContract from "./contracts/Election.json";
 import getWeb3 from "./getWeb3";
-import { Nav, Navbar, Spinner } from "react-bootstrap";
+import { Spinner, ListGroup, Card, Alert } from "react-bootstrap";
+import Layout from "./components/layout";
 import AddCandidates from "./components/addcandidates";
 import ApproveVoters from "./components/approveVoters";
 import ChangeOwner from "./components/changeowner";
 import ViewCandidates from "./components/viewCandidates";
 import CheckRegistration from "./components/checkRegistration";
 import Vote from "./components/vote";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
   const [web3, setWeb3] = useState(null);
-  const [owner, setOwner] = useState(null);
+  const [isOwner, setOwner] = useState(null);
   const [candidates, setCandidates] = useState(null);
   const [account, setAccount] = useState(null);
   const [election, setElection] = useState(null);
@@ -37,7 +38,9 @@ const App = () => {
           deployedNetwork && deployedNetwork.address
         );
         const owner = await instance.methods.owner().call();
-        setOwner(owner);
+        if (owner === accounts[0]) {
+          setOwner(true);
+        }
         setElection(instance);
 
         var obj = [];
@@ -47,6 +50,7 @@ const App = () => {
           obj.push(candidate);
         }
         setCandidates(obj);
+
       } catch (error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`
@@ -75,12 +79,12 @@ const App = () => {
   };
 
   const checkWinner = async () => {
-    console.log(await election.methods.checkResults().call())
-    // console.log(winnerId)
+    // const winnerId = await election.methods.checkResults().call();
     // const winner = await election.methods.candidates(winnerId).call();
+    console.log(await election.methods.checkResults())
     // setWinner(winner);
   };
-  
+
   const checkRegistration = async (_addr) => {
     const voterInfo = await election.methods.voters(_addr).call();
     return voterInfo;
@@ -92,36 +96,36 @@ const App = () => {
         <Spinner animation="border" />
       ) : (
         <div>
-        <button onClick={checkWinner}> button </button>
-          <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="/">Nepal Votes</Navbar.Brand>
-            <Navbar.Brand onClick={checkWinner}>Get Winner !</Navbar.Brand>
-            <Nav className="mr-auto"></Nav>
-            {account === owner ? (
-              <Nav>
-                <Link to="/approveVoter">Approve Voters</Link>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Link to="/addCandidate">Add Candidates</Link>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Link to="/changeOwner">Change Owner</Link>
-              </Nav>
-            ) : null}
-            <Nav className="mr-auto"></Nav>
-            <Nav className="whiten">
-              <Link to="/viewCandidates">View Candidates</Link>
-            </Nav>{" "}
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Nav className="whiten">
-              <Link to="/checkRegistration">Check Registration</Link>
-            </Nav>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Nav className="whiten">
-              <Link to="/vote">Vote</Link>
-            </Nav>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Nav className="whiten">{account}</Nav>
-          </Navbar>
-          <br />
+          <Alert variant="light" className="right-side">
+            Logged in as: {account}
+          </Alert>
+
+
+          <Layout isOwner={isOwner}>
+          <button onClick={checkWinner}> Check Winner </button>
+            {winner ? (
+              <Card style={{ marginBottom: "20px" }}>
+                <Card.Header>CandidateName: {winner.candidateName}</Card.Header>
+
+                <ListGroup>
+                  <ListGroup.Item>
+                    VoteCount: {winner.candidateVoteCount}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    Candidate Id: {winner.candidateId}
+                  </ListGroup.Item>
+                  <ListGroup.Item>Party: {winner.partyId}</ListGroup.Item>
+                  <ListGroup.Item>
+                    Description: {winner.description}
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            ) : (
+              <Card style={{ marginBottom: "20px" }}>
+                <Card.Header onClick={checkWinner}> Get results! </Card.Header>
+              </Card>
+            )}
+          </Layout>
           <Switch>
             <Route
               exact
@@ -152,8 +156,6 @@ const App = () => {
             />
             <Route exact path="/vote" render={() => <Vote _vote={vote} />} />
           </Switch>
-
-          {winner && winner.candidateName}
         </div>
       )}
     </div>

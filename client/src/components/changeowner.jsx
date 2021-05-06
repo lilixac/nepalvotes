@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import Layout from "./layout";
 import Jumbotron from "react-bootstrap/Jumbotron";
 
 const ChangeOwner = ({ _changeOwner }) => {
@@ -12,7 +12,7 @@ const ChangeOwner = ({ _changeOwner }) => {
 		_changeOwner(addr);
 	};
 	return (
-		<Container>
+		<Layout>
 			<Jumbotron>
 				<h2>Change Owner</h2>
 			</Jumbotron>
@@ -33,7 +33,7 @@ const ChangeOwner = ({ _changeOwner }) => {
 					Submit
 				</Button>
 			</Form>
-		</Container>
+		</Layout>
 	);
 };
 

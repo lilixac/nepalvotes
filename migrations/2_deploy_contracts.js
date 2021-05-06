@@ -1,5 +1,5 @@
 var Election = artifacts.require("./Election.sol");
 
-module.exports = function(deployer) {
-  deployer.deploy(Election, 'NepalVotes', 1620140402, 1620141302);
+module.exports = function (deployer) {
+	deployer.deploy(Election, "NepalVotes", 1620264635, 1620266435);
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import Layout from "./layout";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
 
@@ -15,7 +15,7 @@ const CheckRegistration = ({ _checkRegistration }) => {
 	};
 
 	return (
-		<Container>
+		<Layout>
 			<Jumbotron>
 				<h2>Check Registration</h2>
 			</Jumbotron>
@@ -36,7 +36,6 @@ const CheckRegistration = ({ _checkRegistration }) => {
 					Submit
 				</Button>
 				<hr />
-				{console.log(voterInfo.voterId)}
 				{voterInfo !== "" ? (
 					<ListGroup>
 						<ListGroup.Item>
@@ -48,7 +47,7 @@ const CheckRegistration = ({ _checkRegistration }) => {
 					</ListGroup>
 				) : null}
 			</Form>
-		</Container>
+		</Layout>
 	);
 };
 
