@@ -63,9 +63,9 @@ const App = () => {
     await election.methods.changeOwner(_address).send({ from: account });
   };
 
-  const addCandidate = async (_candidateName, _partyId, _description) => {
+  const addCandidate = async (_candidateName, _partyId, _uri) => {
     await election.methods
-      .addCandidates(_candidateName, parseInt(_partyId), _description)
+      .addCandidates(_candidateName, parseInt(_partyId), _uri)
       .send({ from: account });
   };
 
@@ -77,18 +77,11 @@ const App = () => {
     await election.methods.vote(parseInt(_candidateId)).send({ from: account });
   };
 
-  const checkResults = async() => {
-    // const a = (await await election.methods.checkResults().call())
-    // console.log(a)
-    console.log( await election.methods.endTime().call())
-  }
-
-  // const checkWinner = async () => {
-    // const winnerId = await election.methods.checkResults().call();
-    // const winner = await election.methods.candidates(winnerId).call();
-    // console.log(await election.methods.checkResults().call())
-    // setWinner(winner);
-  // };
+  const checkWinner = async () => {
+    const winnerId = await election.methods.checkResults().call();
+    const winner = await election.methods.candidates(winnerId).call();
+    setWinner(winner);
+  };
 
   const checkRegistration = async (_addr) => {
     const voterInfo = await election.methods.voters(_addr).call();
@@ -105,28 +98,41 @@ const App = () => {
             Logged in as: {account}
           </Alert>
 
-
           <Layout isOwner={isOwner}>
             {winner ? (
-              <Card style={{ marginBottom: "20px" }}>
-                <Card.Header>CandidateName: {winner.candidateName}</Card.Header>
+              <div>
+                <Alert variant="success">
+                  Election has successfully concluded!!
+                </Alert>
 
-                <ListGroup>
-                  <ListGroup.Item>
-                    VoteCount: {winner.candidateVoteCount}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    Candidate Id: {winner.candidateId}
-                  </ListGroup.Item>
-                  <ListGroup.Item>Party: {winner.partyId}</ListGroup.Item>
-                  <ListGroup.Item>
-                    Description: {winner.description}
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
+                <Card style={{ marginBottom: "20px" }}>
+                  <Card.Header>
+                    CandidateName: {winner.candidateName}
+                  </Card.Header>
+
+                  <ListGroup>
+                    <ListGroup.Item>
+                      VoteCount: {winner.candidateVoteCount}
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                      Candidate Id: {winner.candidateId}
+                    </ListGroup.Item>
+                    <ListGroup.Item>Party: {winner.partyId}</ListGroup.Item>
+                    {/* 
+                        Todo: Format metdata properly. Metadata is a url in ipfs 
+                        which contains various information about candidate. 
+                        This data should be taken while adding the candidate. 
+                        Sth like image, description and others. 
+                        The image should be another ipfs link, and description should be in ipfs too for immutability. 
+                        Too expensive to store in blockchain.  
+                    */}
+                    <ListGroup.Item>Metadata: {winner.uri}</ListGroup.Item>
+                  </ListGroup>
+                </Card>
+              </div>
             ) : (
               <Card style={{ marginBottom: "20px" }}>
-                <Card.Header onClick={checkResults}> Get results! </Card.Header>
+                <Card.Header onClick={checkWinner}> Get results! </Card.Header>
               </Card>
             )}
           </Layout>

@@ -23,7 +23,7 @@ contract Election {
 		string candidateName;
 		uint partyId;
 		uint candidateVoteCount;
-		string description;
+		string uri;
 	}
 
 	event NewCandidateAdded (
@@ -31,7 +31,7 @@ contract Election {
 		string candidateName,
 		uint partyId,
 		uint candidateVoteCount,
-		string description
+		string uri
 	);
 
 	struct Voter {
@@ -63,21 +63,22 @@ contract Election {
 	function addCandidates(
 		string memory _candidateName, 
 		uint _partyId, 
-		string memory _description
-		) public ownerOnly 
-		onlyBefore(startTime) {
+		string memory _uri
+		) public 
+		onlyBefore(startTime) 
+		ownerOnly  {
 
 		require(bytes(_candidateName).length > 5);
 		require(_partyId > 0);
 		candidateCount++;
-		candidates[candidateCount] = Candidate(candidateCount, _candidateName, _partyId, 0, _description);
-		emit NewCandidateAdded(candidateCount, _candidateName, _partyId, 0, _description);
+		candidates[candidateCount] = Candidate(candidateCount, _candidateName, _partyId, 0, _uri);
+		emit NewCandidateAdded(candidateCount, _candidateName, _partyId, 0, _uri);
 	}
 
 	function approveVoters(address _voter) 
 		public 
-		ownerOnly 
-		onlyBefore(startTime) {
+		onlyBefore(startTime) 
+		ownerOnly {
 			
 		require(!voters[_voter].authorized);
 		require (voters[_voter].authorized == false);
@@ -99,7 +100,9 @@ contract Election {
 		_voter.voted = true;
 	}
 
-	function checkResults() public view onlyAfter(endTime) returns (uint winningCandidateId) {
+	function checkResults() public view 
+	onlyAfter(endTime) 
+	returns (uint winningCandidateId) {
 		
 		uint highestVoteCount = 0;
 		for(uint i = 1; i <= candidateCount; i++) {

@@ -7,11 +7,11 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 const AddCandidates = ({ _addCandidate }) => {
 	const [name, setName] = useState("");
 	const [party, setParty] = useState(0);
-	const [description, setDescription] = useState("");
+	const [uri, setUri] = useState("");
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
-		_addCandidate(name, party, description);
+		_addCandidate(name, party, uri);
 	};
 
 	return (
@@ -44,7 +44,7 @@ const AddCandidates = ({ _addCandidate }) => {
 				<Form.Group controlId="formBasic">
 					<Form.Label>Description</Form.Label>
 					<Form.Control
-						onChange={(e) => setDescription(e.target.value)}
+						onChange={(e) => setUri(e.target.value)}
 						as="textarea"
 						rows={3}
 						placeholder="Description"

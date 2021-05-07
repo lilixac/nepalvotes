@@ -22,7 +22,7 @@ const ViewCandidates = ({ candidates }) => {
 								Party Id: {i.partyId}{" "}
 							</ListGroup.Item>
 							<ListGroup.Item>
-								Description: {i.description}
+								Metadata: {i.uri}
 							</ListGroup.Item>
 							<ListGroup.Item>
 								Votes Obtained: {i.candidateVoteCount}
