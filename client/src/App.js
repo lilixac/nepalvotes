@@ -50,7 +50,6 @@ const App = () => {
           obj.push(candidate);
         }
         setCandidates(obj);
-
       } catch (error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`
@@ -78,12 +77,18 @@ const App = () => {
     await election.methods.vote(parseInt(_candidateId)).send({ from: account });
   };
 
-  const checkWinner = async () => {
+  const checkResults = async() => {
+    // const a = (await await election.methods.checkResults().call())
+    // console.log(a)
+    console.log( await election.methods.endTime().call())
+  }
+
+  // const checkWinner = async () => {
     // const winnerId = await election.methods.checkResults().call();
     // const winner = await election.methods.candidates(winnerId).call();
-    console.log(await election.methods.checkResults())
+    // console.log(await election.methods.checkResults().call())
     // setWinner(winner);
-  };
+  // };
 
   const checkRegistration = async (_addr) => {
     const voterInfo = await election.methods.voters(_addr).call();
@@ -102,7 +107,6 @@ const App = () => {
 
 
           <Layout isOwner={isOwner}>
-          <button onClick={checkWinner}> Check Winner </button>
             {winner ? (
               <Card style={{ marginBottom: "20px" }}>
                 <Card.Header>CandidateName: {winner.candidateName}</Card.Header>
@@ -122,7 +126,7 @@ const App = () => {
               </Card>
             ) : (
               <Card style={{ marginBottom: "20px" }}>
-                <Card.Header onClick={checkWinner}> Get results! </Card.Header>
+                <Card.Header onClick={checkResults}> Get results! </Card.Header>
               </Card>
             )}
           </Layout>
